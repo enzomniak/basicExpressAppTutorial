@@ -1,4 +1,5 @@
 const express = require("express");
+const morgan = require("morgan");
 
 //Creat an express app instance
 const app = express();
@@ -8,6 +9,10 @@ app.set("view engine", "ejs");
 
 //Listen for request
 app.listen(3000);
+
+//Static files and middleware
+app.use(express.static("public")) //Folder name "public"
+app.use(morgan("dev"));
 
 //Render a view
 app.get("/", (request, response) => {
