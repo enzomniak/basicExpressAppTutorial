@@ -8,13 +8,14 @@
     <%- include("./partials/nav.ejs") %> 
 
     <div class="create-blog content">
-        <form>
+        <form action="/blogs" method="POST"> <!-- We want it to send to the path "/blogs" -->
             <label for="title">Blog title:</label>
-            <input type="text" id="title" required>
+            <input type="text" id="title" name="title" required>
             <label for="snippet">Blog snippet:</label>
-            <input type="text" id="snippet" required>
+            <input type="text" id="snippet" name="snippet" required>
             <label for="body">Blog body:</label>
-            <textarea id="body" required></textarea>
+            <textarea id="body" name="body" required></textarea>
+            <button>Submit</button>
         </form>
     </div>
     <%- include("./partials/footer.ejs") %> 

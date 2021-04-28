@@ -10,12 +10,12 @@
     <div class="blogs content">
         <h2> All Blogs </h2>
 
-        <!-- We are opening and closing the script tags multiple times -->
-        <!-- It's not that complicated just look closly -->
         <% if (blogs.length > 0) { %>
             <% blogs.forEach(blog => { %>
-                <h3 class="title"> <%= blog.title %> </h3>
-                <p class="snippet"> <%= blog.snippet %> </p>
+                <a class="single" href="/blogs/<%= blog._id %>"> <!--wrap each blog in link-->
+                    <h3 class="title"> <%= blog.title %> </h3>
+                    <p class="snippet"> <%= blog.snippet %> </p>
+                </a>
             <% }); %>
         <% } else { %>
             <p>There are no blogs to display</p>

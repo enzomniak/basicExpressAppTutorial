@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include("./partials/head.ejs") %> 
+<body>
+    <%- include("./partials/nav.ejs") %> 
+
+    <div class="details content">
+        <h2><%= blog.title %></h2>
+        <div class="content">
+            <p><%= blog.body %></p>
+        </div>
+        <a class="delete" data-doc="<%= blog._id %>">delete</a>
+    </div>
+    <%- include("./partials/footer.ejs") %> 
+
+    <!-- The scipt here will run on the browser not on the server -->
+    <script>
+        // select based on class
+        const trashcan = document.querySelector("a.delete");
+
+        // This here is an ajax
+        trashcan.addEventListener("click", e => {
+            const endpoint = `/blogs/${trashcan.dataset.doc}`; // /blogs/:id
+            fetch(endpoint, { //This will send a fetch to the server "app.js"
+                method: "DELETE" //Using DELETE method
+            }) //fetch is async
+            .then( result => result.json())
+            //Finally here we can change the window object href location to be the reirect path
+            .then(data => window.location.href = data.redirect) 
+            .catch(err => console.log(err))
+        });
+    </script>
+</body>
+</html>
+

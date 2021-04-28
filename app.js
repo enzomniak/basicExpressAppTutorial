@@ -23,6 +23,7 @@ app.set("view engine", "ejs");
 
 //Static files and middleware
 app.use(express.static("public")) //Folder name "public"
+app.use(express.urlencoded({ extended: true })); //Used to takes all url encoded data and pass it so we can use
 app.use(morgan("dev"));
 
 //Main routes
@@ -43,7 +44,7 @@ app.get("/about-me", (request, resoponse) => {
 
 //Blog routes
 app.get("/blogs", (request, response) => {
-    Blog.find().sort({createAt: -11}) //We can also sort by date
+    Blog.find().sort({createdAt: -1}) //We can also sort by date
         .then(result => { //Remember this will return an object which is how the index.ejs render
             response.render("index", { title: "All Blogs", blogs: result })
         })
@@ -57,8 +58,46 @@ app.get("/blogs/create", (request, response) => {
     response.render("create", { title: "Create" });
 });
 
+//Blog POST
+app.post("/blogs", (request, response) => {
+    const blog = new Blog(request.body); //Now we can pass the object that we logged to create a new blog
+    //Save to the database
+    blog.save()
+        //Then we can foword to the main page to see all blogs
+        .then(result => {
+            response.redirect("/blogs");
+        })
+        .catch(err => {
+            console.log(err);
+        })
+});
+
+//Get single blog
+app.get("/blogs/:id", (request, response) => {
+    const id = request.params.id;
+    Blog.findById(id)
+        .then(result => {
+            response.render("details", { blog: result, title: "Blog Details" });
+        })
+        .catch(err => {
+            console.log(err);
+        })
+});
+
+//Handle a delete request
+app.delete("/blogs/:id", (requset, response) => {
+    const id = requset.params.id;
+    Blog.findByIdAndDelete(id)
+        .then(result => {
+            //if we do an ajax we can't render so we'll pass a JSON instead
+            response.json({ redirect: "/blogs" }); //Here we send th JSON back to the browser for redirect later
+        })
+        .catch(err => {
+            console.log(err);
+        })
+});
+
 //404 page
 app.use((request, response) => {
     response.status(404).render("404", { title: "Error" });
 });
-
