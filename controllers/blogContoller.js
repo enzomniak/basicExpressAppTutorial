@@ -18,7 +18,8 @@ const blog_details = (request, response) => {
             response.render("blogs/details", { blog: result, title: "Blog Details" });
         })
         .catch(err => {
-            console.log(err);
+            //When we enter some random thing after /blogs/... will now render 404
+            response.status(404).render("404", { title: "Blog Not Found" });
         })
 };
 
